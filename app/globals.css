@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f1e9;
+  --background-elevated: rgba(253, 250, 245, 0.82);
+  --foreground: #1d2126;
+  --muted-foreground: #58606c;
+  --subtle-foreground: #7b828d;
+  --accent-foreground: #365779;
+  --surface: rgba(31, 37, 45, 0.035);
+  --surface-strong: rgba(31, 37, 45, 0.06);
+  --border: rgba(31, 37, 45, 0.09);
+  --border-strong: rgba(31, 37, 45, 0.16);
+  --accent: #4f7699;
+  --ring: rgba(79, 118, 153, 0.22);
+  --shadow: 0 26px 72px -52px rgba(23, 31, 41, 0.24);
+}
+
+.dark {
+  --background: #0f1319;
+  --background-elevated: rgba(18, 24, 32, 0.82);
+  --foreground: #f1f3f6;
+  --muted-foreground: #9db2c6;
+  --subtle-foreground: #718096;
+  --accent-foreground: #a0c4e2;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --accent: #5c93c4;
+  --ring: rgba(92, 147, 196, 0.22);
+  --shadow: 0 26px 72px -52px rgba(0, 0, 0, 0.65);
+}
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(121, 156, 189, 0.13), transparent 32%),
+    radial-gradient(circle at 84% 14%, rgba(191, 177, 146, 0.12), transparent 18%),
+    var(--background);
+  color: var(--foreground);
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at top, rgba(92, 147, 196, 0.09), transparent 35%),
+    radial-gradient(circle at 84% 14%, rgba(240, 196, 120, 0.04), transparent 22%),
+    var(--background);
+}
+
+a,
+button {
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 24%, transparent);
+}
+
+.prose-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.prose-shell .anchor {
+  text-decoration: none;
+}
+
+.prose-shell > :first-child {
+  margin-top: 0;
+}
+
+.prose-shell > :last-child {
+  margin-bottom: 0;
+}
+
+.prose-shell table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+}
+
+.prose-shell th,
+.prose-shell td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 1rem;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.prose-shell th {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.prose-shell em {
+  color: var(--subtle-foreground);
+}
+
+.prose-shell tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-shell .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
