@@ -11,7 +11,6 @@
 - The project combines natural language processing, scientific document understanding, and materials informatics workflows.
 
 *Manuscript in preparation. Database website to be released soon.*
-(Image)[!images/Masters/5_masters.png]
 ---
 
 # 4] Study of Low Lattice Thermal Conductivity in Doped GeTe using Universal Machine Learning Interatomic Potentials
@@ -27,7 +26,6 @@
 - The project focuses on scalable atomistic simulations for complex disordered thermoelectric materials.
 
 *Manuscript in preparation.*
-(Image)[!images/Masters/4_masters.png]
 ---
 
 # 3] Vibrational and Raman Study in B-type Carbonated Hydroxyapatite
@@ -41,7 +39,8 @@
 - The work focused on identifying characteristic vibrational signatures and understanding structure–spectroscopy relationships in carbonated hydroxyapatite systems.
 
 *Manuscript in preparation.*
-(Image)[!images/Masters/3_masters.png]
+---
+
 # 2] Accelerating Search for Superconductors using Machine Learning
 
 - The discovery of new superconductors has traditionally relied heavily on experimental trial-and-error approaches.
@@ -53,7 +52,7 @@
 - Quantum Structure Diagram-based descriptors were used to train and interpret the models.
 
 - The project focused on combining physically meaningful descriptors with data-driven approaches for accelerated superconducting materials discovery.
-(Image)[!images/Masters/2_masters.png]
+
 ## Resources
 
 - [Open-Source Database and Code Repository](https://github.com/adigasuhas/Accelerating-Search-for-Superconductors-using-Machine-Learning)
