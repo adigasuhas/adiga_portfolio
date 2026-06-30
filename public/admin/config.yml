@@ -1,0 +1,302 @@
+# Decap CMS configuration
+# Local dev: run `npx decap-server` in a separate terminal, then visit /admin
+# Production: uses Netlify Identity + Git Gateway
+
+backend:
+  name: git-gateway
+  branch: main
+
+# Local editing backend (the `npx decap-server` proxy).
+# The URL and allowed_hosts are set dynamically in admin/index.html so the CMS
+# works from localhost or any LAN IP without changing this file.
+local_backend: true
+
+media_folder: public/assets/uploads
+public_folder: /assets/uploads
+
+# ─── Collections ─────────────────────────────────────────────────────────────
+
+collections:
+
+  # ── Research Projects (folder — one JSON file per project) ───────────────
+  - name: projects
+    label: Research Projects
+    label_singular: Project
+    folder: content/projects
+    create: true
+    delete: true
+    format: json
+    extension: json
+    identifier_field: slug
+    summary: "{{number}}. {{title}} ({{degree}})"
+    slug: "{{fields.number}}-{{slug}}"
+    fields:
+      - { label: "ID", name: id, widget: string }
+      - { label: "Number (controls sort order, descending)", name: number, widget: number, value_type: int }
+      - { label: "Slug", name: slug, widget: string }
+      - { label: "Title", name: title, widget: string }
+      - label: "Degree"
+        name: degree
+        widget: select
+        options: ["B.Sc.", "M.S.", "Ph.D."]
+      - label: "Status"
+        name: status
+        widget: select
+        options:
+          - { label: "Published", value: published }
+          - { label: "Manuscript in Review", value: manuscript-in-review }
+          - { label: "Manuscript in Preparation", value: manuscript-in-preparation }
+      - { label: "Image", name: image, widget: image }
+      - { label: "One-sentence summary", name: summary, widget: text }
+      - { label: "Full description (use double newlines for paragraphs)", name: description, widget: text }
+      - label: "Resources / links"
+        name: resources
+        widget: list
+        required: false
+        summary: "{{fields.label}}"
+        fields:
+          - { label: "Label", name: label, widget: string }
+          - { label: "URL", name: url, widget: string }
+      - { label: "Citation", name: citation, widget: text, required: false }
+      - { label: "Paper URL", name: paperUrl, widget: string, required: false }
+
+  # ── Publications (single file, array stored under `publications`) ──────────
+  - name: publications
+    label: Publications
+    files:
+      - label: "Publications"
+        name: publications
+        file: content/publications.json
+        format: json
+        fields:
+          - label: "Publications (drag to reorder — higher Number shows first)"
+            name: publications
+            widget: list
+            summary: "{{fields.number}}. {{fields.title}} ({{fields.year}})"
+            fields:
+              - { label: "ID", name: id, widget: string }
+              - { label: "Number (controls order, descending = newest first)", name: number, widget: number, value_type: int }
+              - { label: "Authors", name: authors, widget: string }
+              - { label: "Title", name: title, widget: string }
+              - { label: "Journal", name: journal, widget: string }
+              - { label: "Volume", name: volume, widget: string, required: false }
+              - { label: "Issue", name: issue, widget: string, required: false }
+              - { label: "Article number", name: article, widget: string, required: false }
+              - { label: "Pages", name: pages, widget: string, required: false }
+              - { label: "Year", name: year, widget: number, value_type: int }
+              - { label: "DOI URL", name: doi, widget: string }
+              - { label: "Code repository URL", name: repository, widget: string, required: false }
+              - { label: "Cover image", name: cover, widget: image }
+
+  # ── Theses ────────────────────────────────────────────────────────────────
+  - name: theses
+    label: Theses
+    files:
+      - label: "Theses"
+        name: theses
+        file: content/theses.json
+        format: json
+        fields:
+          - label: "Theses (drag to reorder)"
+            name: theses
+            widget: list
+            summary: "{{fields.degree}} — {{fields.title}}"
+            fields:
+              - { label: "ID", name: id, widget: string }
+              - { label: "Title", name: title, widget: string }
+              - { label: "Degree label (e.g. Master's Thesis)", name: degree, widget: string }
+              - { label: "Authors", name: authors, widget: string }
+              - { label: "Year", name: year, widget: number, value_type: int }
+              - { label: "Institution", name: institution, widget: string }
+              - { label: "Cover image", name: cover, widget: image }
+              - { label: "PDF / Drive URL", name: driveUrl, widget: string, required: false }
+
+  # ── Awards ────────────────────────────────────────────────────────────────
+  - name: awards
+    label: Awards
+    files:
+      - label: "Awards"
+        name: awards
+        file: content/awards.json
+        format: json
+        fields:
+          - label: "Awards (drag to reorder — sorted by year on the site)"
+            name: awards
+            widget: list
+            summary: "{{fields.title}} ({{fields.year}})"
+            fields:
+              - { label: "ID", name: id, widget: string }
+              - { label: "Title", name: title, widget: string }
+              - { label: "Description", name: description, widget: text }
+              - { label: "Organization", name: organization, widget: string }
+              - { label: "Year", name: year, widget: number, value_type: int }
+              - { label: "Month", name: month, widget: string }
+              - { label: "Logo", name: logo, widget: image, required: false }
+
+  # ── Conferences (with photo galleries) ───────────────────────────────────
+  - name: conferences
+    label: Conferences
+    files:
+      - label: "Conferences"
+        name: conferences
+        file: content/conferences.json
+        format: json
+        fields:
+          - label: "Conferences (drag to reorder)"
+            name: conferences
+            widget: list
+            summary: "{{fields.title}} — {{fields.date}}"
+            fields:
+              - { label: "ID", name: id, widget: string }
+              - { label: "Number (controls order, descending)", name: number, widget: number, value_type: int }
+              - { label: "Title", name: title, widget: string }
+              - { label: "Subtitle", name: subtitle, widget: string, required: false }
+              - { label: "Location", name: location, widget: string }
+              - { label: "Date (e.g. December 2024)", name: date, widget: string }
+              - label: "Photographs"
+                name: images
+                widget: list
+                required: false
+                summary: "{{fields.caption}}"
+                fields:
+                  - { label: "Image", name: src, widget: image }
+                  - { label: "Caption", name: caption, widget: string }
+
+  # ── Resources ─────────────────────────────────────────────────────────────
+  - name: resources
+    label: Resources
+    files:
+      - label: "Resources"
+        name: resources
+        file: content/resources.json
+        format: json
+        fields:
+          - { label: "Intro paragraph (shown above the cards)", name: intro, widget: text, required: false }
+          - label: "Resource sections (drag to reorder)"
+            name: resources
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "ID", name: id, widget: string }
+              - { label: "Title", name: title, widget: string }
+              - { label: "Logo (optional)", name: logo, widget: image, required: false }
+              - { label: "Description (optional)", name: description, widget: text, required: false }
+              - label: "Primary link (optional)"
+                name: link
+                widget: object
+                required: false
+                fields:
+                  - { label: "Label", name: label, widget: string, required: false }
+                  - { label: "URL", name: url, widget: string, required: false }
+              - label: "Categories (optional)"
+                name: categories
+                widget: list
+                required: false
+                summary: "{{fields.heading}}"
+                fields:
+                  - { label: "Heading (optional)", name: heading, widget: string, required: false }
+                  - label: "Items"
+                    name: items
+                    widget: list
+                    fields:
+                      - { label: "Label", name: label, widget: string }
+                      - { label: "URL", name: url, widget: string }
+                      - { label: "Description", name: description, widget: string }
+              - { label: "Note (optional)", name: note, widget: text, required: false }
+
+  # ── Academic Trajectory (timeline) ───────────────────────────────────────
+  - name: timeline
+    label: Academic Trajectory
+    files:
+      - label: "Timeline"
+        name: timeline
+        file: content/timeline.json
+        format: json
+        fields:
+          - label: "Entries (drag to reorder)"
+            name: timeline
+            widget: list
+            summary: "{{fields.institution}} ({{fields.years}})"
+            fields:
+              - { label: "ID", name: id, widget: string }
+              - { label: "Institution", name: institution, widget: string }
+              - { label: "Degree", name: degree, widget: string }
+              - { label: "Years (e.g. 2023 – 2026)", name: years, widget: string }
+              - { label: "Logo", name: logo, widget: image }
+              - { label: "Upcoming?", name: upcoming, widget: boolean, required: false, default: false }
+
+  # ── Site-wide single-object content ───────────────────────────────────────
+  - name: site
+    label: Site Content
+    files:
+
+      - label: "About"
+        name: about
+        file: content/about.json
+        format: json
+        fields:
+          - { label: "Full name", name: name, widget: string }
+          - { label: "One-line headline", name: headline, widget: string, required: false }
+          - { label: "Portrait image", name: portrait, widget: image }
+          - { label: "Biography (Markdown — links like [text](https://…) are rendered)", name: biography, widget: text }
+          - { label: "CV URL", name: cvUrl, widget: string, required: false }
+          - label: "Email addresses"
+            name: emails
+            widget: list
+            field: { label: "Email", name: email, widget: string }
+          - label: "Profile links"
+            name: links
+            widget: list
+            summary: "{{fields.label}}"
+            fields:
+              - { label: "Label", name: label, widget: string }
+              - { label: "URL", name: url, widget: string }
+
+      - label: "Contact page"
+        name: contact
+        file: content/contact.json
+        format: json
+        fields:
+          - { label: "Biography for contact page", name: biography, widget: text }
+          - { label: "Address (use new lines for line breaks)", name: address, widget: text }
+          - label: "Photography"
+            name: photography
+            widget: list
+            summary: "{{fields.caption}}"
+            fields:
+              - { label: "Image", name: src, widget: image }
+              - { label: "Caption", name: caption, widget: string }
+
+      - label: "Research interests"
+        name: research-interest
+        file: content/research-interest.json
+        format: json
+        fields:
+          - { label: "Prose (use double newlines for paragraph breaks)", name: prose, widget: text }
+          - { label: "Projects intro paragraph", name: projectsIntro, widget: text, required: false }
+
+  # ── Writings / Articles / Blog (folder — one MDX file per article) ────────
+  # Future-proof: new articles appear automatically without code changes.
+  # The writing/[slug] route is already live in the app.
+  - name: writings
+    label: Articles & Blog
+    label_singular: Article
+    folder: content/writings
+    create: true
+    delete: true
+    format: frontmatter
+    extension: mdx
+    identifier_field: slug
+    summary: "{{title}} ({{date}})"
+    fields:
+      - { label: "Title", name: title, widget: string }
+      - { label: "Slug (URL path)", name: slug, widget: string }
+      - { label: "Date", name: date, widget: datetime, format: "YYYY-MM-DD" }
+      - { label: "Description / excerpt", name: description, widget: text }
+      - { label: "Cover image", name: cover, widget: image, required: false }
+      - label: "Tags"
+        name: tags
+        widget: list
+        required: false
+        field: { label: "Tag", name: tag, widget: string }
+      - { label: "Body (Markdown — supports LaTeX with $...$ and $$...$$, code blocks, images)", name: body, widget: markdown }

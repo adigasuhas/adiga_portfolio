@@ -1,0 +1,14 @@
+# Netlify build configuration
+# See https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  command = "npm run build"
+  publish  = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# @netlify/plugin-nextjs handles Next.js routing, redirects, and image
+# optimisation — Netlify installs it automatically from this declaration.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

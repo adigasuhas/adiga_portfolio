@@ -1,0 +1,23 @@
+{
+  "paperUrl": "https://doi.org/10.1119/5.0250860",
+  "resources": [
+    {
+      "label": "Open-Source Code Repository",
+      "url": "https://github.com/adigasuhas/Toy_Model---Superconductivity"
+    },
+    {
+      "label": "Bachelor's Thesis",
+      "url": "https://drive.google.com/file/d/1NzT1I3AHu1dZA8u9Wegyx3XfdV24dXIN/view?usp=sharing"
+    }
+  ],
+  "summary": "Pedagogical toy model demonstrating how two electrons with identical charge form Cooper pairs via effective attractive interaction mediated by lattice vibrations.",
+  "citation": "Adiga, S., Dahiya, M. & Palakkandy, A. A Toy Model to Explain Superconductivity. The Phys. Teach. 64 (5), 419–423 (2026).",
+  "number": 1,
+  "slug": "toy-model-superconductivity",
+  "degree": "B.Sc.",
+  "status": "published",
+  "title": "Toy Model to Explain Superconductivity",
+  "id": "proj-1",
+  "image": "/assets/Page-2/images/Bachelors/bachelors_project.gif",
+  "description": "Charges of the same polarity typically repel one another. In superconductors, however, electrons can form bound pairs known as Cooper pairs, a phenomenon explained by BCS theory through a quantum mechanical description of electron–phonon interactions.\n\nIn this project, I developed a simple toy model to illustrate how two mutually repelling electrons can experience an effective attractive interaction mediated by lattice vibrations. The model was designed as an intuitive, pedagogical route to understanding the microscopic origin of Cooper pair formation through concepts from classical mechanics. The simulation code and implementation are openly available on GitHub.\n"
+}

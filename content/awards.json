@@ -1,0 +1,40 @@
+{
+  "awards": [
+    {
+      "id": "award-icam",
+      "title": "ICAM–I2CAM AccelNet Travel Grant",
+      "description": "Awarded for a research visit to the Department of Materials Science and Engineering (DMSE), Massachusetts Institute of Technology (MIT), Boston, USA. (The visit was subsequently deferred owing to visa-related constraints.)",
+      "organization": "ICAM–I2CAM",
+      "year": 2025,
+      "month": "December",
+      "logo": "/assets/logos/ICAM.png"
+    },
+    {
+      "id": "award-afm-ihs",
+      "title": "Best Poster Award",
+      "description": "Annual Faculty Meet – In-House Symposium (AFM-IHS), Jawaharlal Nehru Centre for Advanced Scientific Research (JNCASR).",
+      "organization": "JNCASR",
+      "year": 2024,
+      "month": "November",
+      "logo": "/assets/logos/JNCASR_Round.png"
+    },
+    {
+      "id": "award-rakcam",
+      "title": "Best Poster and Talk Award",
+      "description": "International Winter School, RAKCAM – JNCASR, Bengaluru.",
+      "organization": "RAKCAM – JNCASR",
+      "year": 2024,
+      "month": "December",
+      "logo": "/assets/logos/RAKCAM.png"
+    },
+    {
+      "id": "award-electronic-structure",
+      "title": "Best Poster Award",
+      "description": "School on Electronic Structure and Modelling, Bengaluru.",
+      "organization": "UCL – JNCASR",
+      "year": 2025,
+      "month": "January",
+      "logo": "/assets/uploads/jncasr_round.png"
+    }
+  ]
+}

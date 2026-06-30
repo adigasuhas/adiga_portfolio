@@ -1,0 +1,26 @@
+{
+  "timeline": [
+    {
+      "id": "delhi",
+      "institution": "University of Delhi",
+      "degree": "B.Sc. Physical Science",
+      "years": "2020 – 2023",
+      "logo": "/assets/logos/Delhi_University.png"
+    },
+    {
+      "id": "jncasr",
+      "institution": "JNCASR, Bengaluru",
+      "degree": "M.S. in Physical Science",
+      "years": "2023 – 2026",
+      "logo": "/assets/logos/JNCASR_Round.png"
+    },
+    {
+      "id": "liverpool",
+      "institution": "University of Liverpool",
+      "degree": "PhD · Chemistry",
+      "years": "2026 –2030",
+      "logo": "/assets/logos/Liverpool.png",
+      "upcoming": true
+    }
+  ]
+}

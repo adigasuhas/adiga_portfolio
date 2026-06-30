@@ -1,0 +1,420 @@
+@import "tailwindcss";
+
+/* Theme is class-based (next-themes toggles `.dark` on <html>), so make the
+   Tailwind `dark:` variant follow that class rather than the OS media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+  /* Aliases so existing Tailwind font-sans / font-serif classes keep working */
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
+}
+
+/* ─── Light mode (secondary / :root default) ─────────────────────────────── */
+
+:root {
+  color-scheme: light;
+
+  --bg-0:   #ffffff;
+  --bg-1:   #fafafa;
+  --bg-2:   #f5f5f5;
+  --bg-3:   #f0f0f0;
+  --bg-4:   #e8e8e8;
+  --bg-5:   #e0e0e0;
+
+  --border:        rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.14);
+  --border-focus:  rgba(29, 78, 216, 0.5);
+
+  --fg:   #0a0a0a;
+  --fg-2: #525252;
+  --fg-3: #737373;
+
+  --accent:       #1d4ed8;
+  --accent-light: #2563eb;
+  --accent-dim:   rgba(29, 78, 216, 0.1);
+
+  /* Teal secondary accent */
+  --accent-2:       #0f766e;
+  --accent-2-light: #0d9488;
+  --accent-2-dim:   rgba(15, 118, 110, 0.10);
+
+  --shadow-sm:    0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow:       0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-lg:    0 4px 24px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.22);
+
+  /* ── Backward-compat aliases for unchanged components ──────────────────── */
+  --background:          var(--bg-1);
+  --background-elevated: var(--bg-4);
+  --foreground:          var(--fg);
+  --muted-foreground:    var(--fg-2);
+  --subtle-foreground:   var(--fg-3);
+  --accent-foreground:   var(--accent-light);
+  --surface:             var(--bg-3);
+  --surface-strong:      var(--bg-4);
+  --ring:                var(--border-focus);
+}
+
+/* ─── Dark mode (primary) ────────────────────────────────────────────────── */
+
+.dark {
+  color-scheme: dark;
+
+  --bg-0:   #000000;
+  --bg-1:   #070707;
+  --bg-2:   #0f0f0f;
+  --bg-3:   #111111;
+  --bg-4:   #161616;
+  --bg-5:   #1c1c1c;
+
+  --border:        rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-focus:  rgba(59, 130, 246, 0.6);
+
+  --fg:   #f5f5f7;
+  --fg-2: #a1a1aa;
+  --fg-3: #52525b;
+
+  --accent:       #2563eb;
+  --accent-light: #60a5fa;
+  --accent-dim:   rgba(37, 99, 235, 0.12);
+
+  /* Teal secondary accent */
+  --accent-2:       #0d9488;
+  --accent-2-light: #2dd4bf;
+  --accent-2-dim:   rgba(13, 148, 136, 0.12);
+
+  --shadow-sm:    0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow:       0 1px 3px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-lg:    0 4px 24px rgba(0, 0, 0, 0.7);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.85);
+
+  /* ── Backward-compat aliases ────────────────────────────────────────────── */
+  --background:          var(--bg-1);
+  --background-elevated: var(--bg-4);
+  --foreground:          var(--fg);
+  --muted-foreground:    var(--fg-2);
+  --subtle-foreground:   var(--fg-3);
+  --accent-foreground:   var(--accent-light);
+  --surface:             var(--bg-3);
+  --surface-strong:      var(--bg-4);
+  --ring:                var(--border-focus);
+}
+
+/* ─── Base reset ─────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--bg-1);
+  color: var(--fg);
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Diagonal-stripe texture — consistent design language across both modes.
+   Specificity order matters: body < :root body < .dark body  */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Light mode stripes — dark lines on light canvas */
+:root body::before {
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px,
+      transparent 40px,
+      rgba(0, 0, 0, 0.05) 40px,
+      rgba(0, 0, 0, 0.05) 41px
+    );
+}
+
+/* Dark mode stripes — white lines on dark canvas, placed AFTER :root so it wins */
+.dark body::before {
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px,
+      transparent 40px,
+      rgba(255, 255, 255, 0.08) 40px,
+      rgba(255, 255, 255, 0.08) 41px
+    );
+}
+
+/* Radial ambient glows — blue from top-centre, teal from right. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Light mode glows — same positions as dark, stronger opacity so they read on white */
+:root body::after {
+  background:
+    radial-gradient(ellipse 70% 45% at 60% -10%, rgba(29, 78, 216, 0.14), transparent),
+    radial-gradient(ellipse 45% 65% at 105% 55%, rgba(15, 118, 110, 0.10), transparent);
+}
+
+/* Dark mode glows — stronger so they read on black */
+.dark body::after {
+  background:
+    radial-gradient(ellipse 70% 45% at 60% -10%, rgba(37, 99, 235, 0.20), transparent),
+    radial-gradient(ellipse 45% 65% at 105% 55%, rgba(13, 148, 136, 0.16), transparent);
+}
+
+/* ─── Transitions ────────────────────────────────────────────────────────── */
+
+a, button {
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+/* ─── Focus ──────────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────────── */
+
+::selection {
+  background: var(--accent-dim);
+  color: var(--fg);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+/* ─── Typography scale classes ───────────────────────────────────────────── */
+
+.text-hero {
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(2.75rem, 6vw, 4.75rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.text-display-xl {
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.text-display-l {
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.text-heading {
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.text-subheading {
+  font-family: var(--font-display, sans-serif);
+  font-size: 1.1875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.text-body {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--fg-2);
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--fg-3);
+  letter-spacing: 0.01em;
+}
+
+/* ─── Eyebrow label ──────────────────────────────────────────────────────── */
+
+.eyebrow {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+/* ─── Card system ─────────────────────────────────────────────────────────── */
+
+.card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  background: var(--bg-3);
+  box-shadow: var(--shadow);
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.card-elevated {
+  background: var(--bg-4);
+}
+
+.card-hover:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-5);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .card-body { padding: 1.5rem; }
+}
+
+/* ─── Media container (white-padded frame for all images) ───────────────── */
+
+.media-container {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 0.375rem;
+  border: 1px solid var(--border);
+}
+
+/* In light mode the default --border is nearly invisible on white; use a
+   stronger tint so the portrait frame reads clearly. */
+:root .media-container {
+  border-color: rgba(0, 0, 0, 0.20);
+}
+
+/* ─── Rich text (MDX prose) ──────────────────────────────────────────────── */
+
+.prose-shell {
+  display: grid;
+  gap: 1rem;
+  color: var(--fg-2);
+}
+
+.prose-shell > :first-child { margin-top: 0; }
+.prose-shell > :last-child  { margin-bottom: 0; }
+
+.prose-shell h1,
+.prose-shell h2,
+.prose-shell h3 {
+  color: var(--fg);
+  font-family: var(--font-display, sans-serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.prose-shell p    { line-height: 1.8; }
+.prose-shell em   { color: var(--fg-3); }
+.prose-shell strong { color: var(--fg); font-weight: 600; }
+
+.prose-shell a {
+  color: var(--accent-light);
+  text-decoration: underline;
+  text-decoration-color: rgba(96, 165, 250, 0.35);
+  text-underline-offset: 3px;
+}
+.prose-shell a:hover {
+  color: var(--fg);
+  text-decoration-color: var(--fg);
+}
+
+.prose-shell ul,
+.prose-shell ol { padding-left: 1.5rem; }
+.prose-shell li { margin-bottom: 0.375rem; line-height: 1.75; }
+
+.prose-shell code {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.875em;
+  background: var(--bg-5);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--fg);
+}
+
+.prose-shell table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.prose-shell th,
+.prose-shell td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.9375rem;
+}
+
+.prose-shell th { color: var(--fg); font-weight: 600; }
+.prose-shell tbody tr:last-child td { border-bottom: none; }
+.prose-shell .katex-display { overflow-x: auto; padding: 0.5rem 0; }
+.prose-shell .anchor { text-decoration: none; }
+
+/* ─── Reduced motion ─────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

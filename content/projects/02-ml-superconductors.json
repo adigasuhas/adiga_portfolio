@@ -1,0 +1,19 @@
+{
+  "id": "proj-2",
+  "number": 2,
+  "slug": "ml-superconductors",
+  "title": "Accelerating Search for Superconductors using Machine Learning",
+  "degree": "M.S.",
+  "status": "published",
+  "image": "/assets/Page-2/images/Masters/2_masters.png",
+  "summary": "Machine learning models using Quantum Structure Diagram-based descriptors to predict superconducting critical temperatures, enabling accelerated data-driven materials discovery.",
+  "description": "The discovery of new superconductors has traditionally relied heavily on experimental trial-and-error approaches. While first-principles methods such as Density Functional Theory (DFT) are effective for conventional superconductors, accurately predicting the critical temperature of unconventional systems remains challenging.\n\nIn this work, we developed machine learning models to predict superconducting critical temperatures using experimentally reported data. Quantum Structure Diagram-based descriptors were used to train and interpret the models. The project focused on combining physically meaningful descriptors with data-driven approaches for accelerated superconducting materials discovery.",
+  "resources": [
+    {
+      "label": "Open-Source Database and Code Repository",
+      "url": "https://github.com/adigasuhas/Accelerating-Search-for-Superconductors-using-Machine-Learning"
+    }
+  ],
+  "citation": "Adiga, S. & Waghmare, U. V. Accelerating the Search for Superconductors Using Machine Learning. Comput. Mater. Sci. 263, 114453 (2026).",
+  "paperUrl": "https://doi.org/10.1016/j.commatsci.2025.114453"
+}

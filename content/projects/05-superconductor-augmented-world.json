@@ -1,0 +1,14 @@
+{
+  "paperUrl": null,
+  "resources": [],
+  "summary": "Large-scale text-mining pipeline extracting 35+ material properties from 4,000+ scientific articles to build a unified superconducting materials database supporting ML modelling and data-driven discovery.",
+  "citation": null,
+  "number": 5,
+  "slug": "superconductor-augmented-world",
+  "degree": "M.S.",
+  "status": "manuscript-in-preparation",
+  "title": "Superconductor Augmented World",
+  "id": "proj-5",
+  "image": "/assets/Page-2/images/Masters/5_masters.png",
+  "description": "Machine learning studies of superconductors have largely relied on composition-based descriptors, owing to the limited availability of structured experimental datasets. Despite significant progress in materials informatics, no unified superconducting-materials database yet integrates experimental properties, theoretical descriptors, and crystal structure information.\n\nIn this project, we developed a large-scale text-mining pipeline to extract more than 35 material properties from over 4,000 published scientific articles. The resulting dataset is designed to support improved machine learning models, structure–property analysis, and data-driven superconductor discovery, by combining natural language processing, scientific document understanding, and materials informatics workflows.\n"
+}

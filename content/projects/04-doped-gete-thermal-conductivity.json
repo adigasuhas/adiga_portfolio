@@ -1,0 +1,14 @@
+{
+  "paperUrl": null,
+  "resources": [],
+  "summary": "Universal Machine Learning Interatomic Potentials applied to the vibrational physics of doped GeTe thermoelectric systems at a fraction of DFT computational cost.",
+  "citation": null,
+  "number": 4,
+  "slug": "doped-gete-thermal-conductivity",
+  "degree": "M.S.",
+  "status": "manuscript-in-preparation",
+  "title": "Study of Low Lattice Thermal Conductivity in Doped GeTe using Universal Machine Learning Interatomic Potentials",
+  "id": "proj-4",
+  "image": "/assets/Page-2/images/Masters/4_masters.png",
+  "description": "GeTe is a prominent thermoelectric material, with experimentally reported zT values reaching up to 2.6 upon doping. Understanding the microscopic origin of its low lattice thermal conductivity is essential for designing high-performance thermoelectric materials. However, the introduction of dopants substantially increases the computational cost of first-principles calculations, particularly for phonon and vibrational studies, where the reduction in symmetry is severe.\n\nIn this work, we employ Universal Machine Learning Interatomic Potentials (UMLIPs), together with fine-tuning strategies, to investigate the chemistry and vibrational physics of doped GeTe at a fraction of the cost of DFT calculations. The project centres on scalable atomistic simulations of complex, disordered thermoelectric materials.\n"
+}

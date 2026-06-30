@@ -1,0 +1,31 @@
+{
+  "publications": [
+    {
+      "authors": "Adiga, S., & Waghmare, U. V.",
+      "number": 1,
+      "repository": "https://github.com/adigasuhas/Accelerating-Search-for-Superconductors-using-Machine-Learning",
+      "article": "114453",
+      "journal": "Comput. Mater. Sci.",
+      "cover": "/assets/publications/Publn_1.jpg",
+      "title": "Accelerating the Search for Superconductors Using Machine Learning",
+      "volume": "263",
+      "id": "pub-1",
+      "year": 2026,
+      "doi": "https://doi.org/10.1016/j.commatsci.2025.114453"
+    },
+    {
+      "pages": "419–423",
+      "authors": "Adiga, S., Dahiya, M., & Palakkandy, A.",
+      "number": 2,
+      "repository": "https://github.com/adigasuhas/Toy_Model---Superconductivity",
+      "journal": "The Phys. Teach.",
+      "cover": "/assets/publications/Publn_2.jpg",
+      "title": "A Toy Model to Explain Superconductivity",
+      "issue": "5",
+      "volume": "64",
+      "id": "pub-2",
+      "year": 2026,
+      "doi": "https://doi.org/10.1119/5.0250860"
+    }
+  ]
+}

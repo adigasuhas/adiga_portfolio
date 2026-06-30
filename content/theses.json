@@ -1,0 +1,24 @@
+{
+  "theses": [
+    {
+      "id": "ms-thesis",
+      "title": "Accelerating the Search for Superconductors Using Machine Learning",
+      "degree": "Master's Thesis",
+      "authors": "S. Adiga",
+      "year": 2026,
+      "institution": "JNCASR, Bengaluru",
+      "cover": "/assets/publications/MS_Thesis.jpg",
+      "driveUrl": null
+    },
+    {
+      "id": "bs-thesis",
+      "title": "Formation of Cooper Pairs — A Pedagogical Approach",
+      "degree": "Bachelor's Thesis",
+      "authors": "S. Adiga",
+      "year": 2023,
+      "institution": "University of Delhi",
+      "cover": "/assets/publications/BS_Thesis.jpg",
+      "driveUrl": "https://drive.google.com/file/d/1NzT1I3AHu1dZA8u9Wegyx3XfdV24dXIN/view?usp=sharing"
+    }
+  ]
+}

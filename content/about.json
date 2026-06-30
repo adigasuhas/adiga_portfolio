@@ -1,0 +1,29 @@
+{
+  "name": "Suhas Adiga",
+  "headline": "",
+  "portrait": "/assets/Page-1/images/Suhas_Portfolio.jpg",
+  "biography": "I'm Suhas Adiga, an M.S. graduate from the Jawaharlal Nehru Centre for Advanced Scientific Research (JNCASR), Bengaluru, where I worked under the supervision of [Prof. Umesh V. Waghmare](https://scholar.google.co.in/citations?user=EY7WIIwAAAAJ&hl=en). My research lies at the intersection of Materials Science and Machine Learning, with a particular focus on data-driven strategies for the discovery and design of functional materials.\n\nBeginning in October 2026, I will join [Prof. Matthew J. Rosseinsky](https://en.wikipedia.org/wiki/Matthew_Rosseinsky), [Dr. George R. Darling](https://openalex.org/authors/A5080860663), and [Dr. Chris Collins](https://www.liverpool.ac.uk/people/chris-michael-collins) at the [Materials Innovation Factory, University of Liverpool](https://www.liverpool.ac.uk/materials-innovation-factory/), as part of Cohort 3 of the [EPSRC CDT in Digital and Automated Materials Chemistry](https://www.liverpool.ac.uk/doctoral-training/digital-and-automated-materials-chemistry/).",
+  "cvUrl": "https://drive.google.com/file/d/17yul5-t27v767thK2ZL2v5vcYxu0XyOv/view?usp=sharing",
+  "emails": [
+    "suhasadiga@jncasr.ac.in",
+    "suhas.adiga.theory@gmail.com"
+  ],
+  "links": [
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/suhas-adiga-a3a474201/"
+    },
+    {
+      "label": "Google Scholar",
+      "url": "https://scholar.google.com/citations?user=qTv16IUAAAAJ&hl=en&oi=ao"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/adigasuhas"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/adiga_suhas"
+    }
+  ]
+}

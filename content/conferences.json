@@ -1,0 +1,75 @@
+{
+  "conferences": [
+    {
+      "id": "conf-1",
+      "number": 1,
+      "title": "Shell.ai Scientific Conference",
+      "location": "Bengaluru",
+      "date": "August 2024",
+      "images": []
+    },
+    {
+      "id": "conf-2",
+      "number": 2,
+      "title": "International Winter School on Frontiers in Materials Science",
+      "subtitle": "RAKCAM – JNCASR",
+      "location": "Bengaluru",
+      "date": "December 2024",
+      "images": [
+        {
+          "src": "/assets/Page-3/Images/IWS_2024.JPG",
+          "caption": "Selected talk at International Winter School, RAKCAM – JNCASR"
+        },
+        {
+          "src": "/assets/Page-3/Images/IWS_2024_1.JPG",
+          "caption": "Best Poster and Talk Award at International Winter School, RAKCAM – JNCASR"
+        }
+      ]
+    },
+    {
+      "id": "conf-3",
+      "number": 3,
+      "title": "Workshop on AI/ML in Materials Science",
+      "subtitle": "Department of Materials Engineering, IISc",
+      "location": "Bengaluru",
+      "date": "January 2025",
+      "images": []
+    },
+    {
+      "id": "conf-4",
+      "number": 4,
+      "title": "School on Electronic Structure and Simulation",
+      "subtitle": "UCL – JNCASR",
+      "location": "Bengaluru",
+      "date": "January 2025",
+      "images": []
+    },
+    {
+      "id": "conf-5",
+      "number": 5,
+      "title": "Aapali Psi-K",
+      "subtitle": "IISER-Pune",
+      "location": "Pune",
+      "date": "May 2025",
+      "images": [
+        {
+          "src": "/assets/Page-3/Images/Aapali PSI-K.jpg",
+          "caption": "Poster session during Aapali Psi-K, IISER-Pune"
+        }
+      ]
+    },
+    {
+      "id": "conf-6",
+      "number": 6,
+      "title": "Shell.ai Scientific Conference",
+      "location": "Bengaluru",
+      "date": "September 2025",
+      "images": [
+        {
+          "src": "/assets/Page-3/Images/Shell_AI.jpg",
+          "caption": "Poster session during Shell.ai Scientific Conference, Bengaluru"
+        }
+      ]
+    }
+  ]
+}

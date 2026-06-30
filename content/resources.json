@@ -1,0 +1,107 @@
+{
+  "intro": "Below are some of the resources that have genuinely helped me throughout my journey. I will continue adding more resources over time that I believe may also benefit others.",
+  "resources": [
+    {
+      "id": "python-ms",
+      "title": "Python for Materials Science",
+      "logo": "/assets/Page-4/Images/Logo.jpg",
+      "description": "A GitHub repository containing tutorials on Python utilities relevant to Materials Science, covering topics from basic concepts to advanced libraries in the field. The content is presented in the way I have learned and applied it throughout my work. Feedback and suggestions for improvement are always welcome.",
+      "link": {
+        "label": "Python for Materials Science",
+        "url": "https://github.com/adigasuhas/Python-for-Materials-Science"
+      },
+      "categories": [],
+      "note": null
+    },
+    {
+      "id": "machine-learning",
+      "title": "Machine Learning",
+      "logo": null,
+      "description": "Below are resources for learning Machine Learning as a beginner. The first section contains foundational resources for learning ML from a general perspective, while the second builds on applications in materials science.",
+      "link": null,
+      "categories": [
+        {
+          "heading": "Foundations of Machine Learning",
+          "items": [
+            {
+              "label": "Stanford CS 229: Machine Learning",
+              "url": "https://youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU",
+              "description": "Comprehensive lecture series taught by Prof. Andrew Ng."
+            },
+            {
+              "label": "University of Waterloo SYDE 522: Machine Intelligence",
+              "url": "https://youtube.com/playlist?list=PLpFYkKZ3fmP7T0datl4ghRebc7nlkmgVI",
+              "description": "Winter 2019 curriculum taught by Professor H.R. Tizhoosh."
+            }
+          ]
+        },
+        {
+          "heading": "Machine Learning in Materials Science",
+          "items": [
+            {
+              "label": "Imperial College London MATE70026: Machine Learning For Materials",
+              "url": "https://aronwalsh.github.io/MLforMaterials/Overview.html",
+              "description": "Specialized academic course taught by Prof. Aron Walsh."
+            },
+            {
+              "label": "Machine Learning in Materials Science (Reference Book)",
+              "url": "https://www.google.co.in/books/edition/Machine_Learning_in_Materials_Science/F6R1EAAAQBAJ?hl=en&gbpv=0",
+              "description": "Comprehensive textbook by F. Oviedo, K. T. Butler, and P. Canepa (Wiley-VCH, 2024)."
+            },
+            {
+              "label": "Introduction to Materials Informatics",
+              "url": "https://enze-chen.github.io/mi-book-2021/intro.html",
+              "description": "Digital interactive book by Prof. Enze Chen and Prof. Mark Asta."
+            },
+            {
+              "label": "Materials Informatics Lecture Series",
+              "url": "https://youtube.com/playlist?list=PLL0SWcFqypCl4lrzk1dMWwTUrzQZFt7y0",
+              "description": "Video playlist taught by Prof. Taylor Sparks."
+            }
+          ]
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "scientific-design",
+      "title": "Scientific Slide Design",
+      "logo": null,
+      "description": "The resources below are for designing high-quality figures and presentations for clearer science communication, covering the choice of colours, design elements, and slide layouts.",
+      "link": null,
+      "categories": [
+        {
+          "heading": null,
+          "items": [
+            {
+              "label": "Make Attractive Scientific Figures in PowerPoint",
+              "url": "https://www.youtube.com/watch?v=MazT8kT43PQ&t",
+              "description": "Video tutorial on color, typography, and element positioning by Dr. Anubhav Jain (Atom to Materials channel)."
+            },
+            {
+              "label": "Ram Seshadri's Slide Graphics Thread",
+              "url": "https://mrlweb.mrl.ucsb.edu/~seshadri/GraphicsThread-May2020.pdf",
+              "description": "Outstanding, detailed guidelines on preparing clear, high-quality figures and graphics for presentations and publications."
+            },
+            {
+              "label": "Coolors Palette Generator",
+              "url": "https://coolors.co/generate",
+              "description": "A powerful, interactive utility for generating clean, harmonious color palettes and gradients."
+            },
+            {
+              "label": "WebAIM Color Contrast Checker",
+              "url": "https://webaim.org/resources/contrastchecker/",
+              "description": "Essential tool for verifying text-to-background contrast ratios against web accessibility standards."
+            },
+            {
+              "label": "Making Scientific Figures with Illustrator and Blender",
+              "url": "https://www.youtube.com/watch?v=3IuoK07YDds&list=PLRCLlYmhDNMyTLhQCtlPryR_6odf6tBBF",
+              "description": "Comprehensive tutorial series on scientific illustration and 3D modeling by Christopher Gutierrez (UCLA)."
+            }
+          ]
+        }
+      ],
+      "note": "* Suggested by Dr. Arijit Sinha — I am deeply grateful for his excellent guidance."
+    }
+  ]
+}
