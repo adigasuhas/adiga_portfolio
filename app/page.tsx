@@ -1,130 +1,117 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { FadeIn } from "@/components/motion/fade-in";
 import { AcademicTimeline } from "@/components/site/academic-timeline";
 import { MarkdownText } from "@/components/site/markdown-text";
-import { Card, CardBody } from "@/components/ui/card";
+import { SectionHeading } from "@/components/site/page-header";
+import { ParallaxPortrait } from "@/components/site/parallax-portrait";
+import { SocialIcon } from "@/components/site/social-icon";
+import { arrowNudge, arrowSlide, buttonClass } from "@/components/ui/link-button";
 import { getSiteData } from "@/lib/content";
-import { cn } from "@/lib/utils";
 
 export default async function HomePage() {
   const data = await getSiteData();
+  const { about } = data;
 
   return (
-    <main className="px-4 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-6xl">
+    <main className="shell">
+      {/* ── About (hero) ─────────────────────────────────────────────────── */}
+      <section className="grid gap-10 pb-12 pt-8 sm:gap-14 sm:pb-16 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start lg:gap-20 lg:pt-20">
+        {about.portrait && (
+          <FadeIn className="order-first w-[13.5rem] sm:w-[17rem] lg:order-last lg:mt-4 lg:w-full" delay={0.15} y={24}>
+            <ParallaxPortrait alt={about.name} src={about.portrait} />
+          </FadeIn>
+        )}
 
-        {/* ── About ────────────────────────────────────────────────────── */}
-        <section className="grid gap-10 pt-6 pb-12 sm:pt-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(17rem,0.7fr)] lg:items-start lg:gap-14 lg:pb-14 lg:pt-12">
-          <FadeIn className="space-y-7">
-            {/* Section heading — display font, same style as Research Interests */}
-            <h1 className="text-display-xl text-[var(--fg)]">About</h1>
+        <div className="min-w-0">
+          <FadeIn>
+            <p className="eyebrow eyebrow-rule">About</p>
+          </FadeIn>
+          <FadeIn delay={0.05}>
+            <h1 className="text-display-xl mt-6 text-[var(--fg)]">{about.name}</h1>
+          </FadeIn>
 
-            {/* Full biography from about.json, rendered as markdown with links */}
+          <FadeIn delay={0.12}>
             <MarkdownText
-              className="max-w-2xl space-y-5"
-              paragraphClassName="text-[1.0625rem] text-[var(--fg-2)] leading-[1.85]"
-              text={data.about.biography}
+              className="mt-8 max-w-[40rem] space-y-6 sm:mt-10"
+                            paragraphClassName="text-body"
+              text={about.biography}
             />
+          </FadeIn>
 
-            {/* CTA row */}
-            <div className="flex flex-wrap gap-3 pt-1">
-              <Link
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-xl",
-                  "bg-[var(--fg)] px-5 py-3 text-sm font-semibold text-[var(--bg-1)]",
-                  "transition-all duration-150 hover:opacity-90 active:scale-[0.98]",
-                  "focus-visible:outline-2 focus-visible:outline-[var(--border-focus)]"
-                )}
-                href="/research"
-              >
+          <FadeIn delay={0.2}>
+            <div className="mt-10 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap">
+              <Link className={buttonClass("primary")} href="/research">
                 Explore Research
-                <ArrowRight className="size-4" />
+                <ArrowRight className={arrowSlide} />
               </Link>
-              {data.about.cvUrl && (
-                <a
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-xl",
-                    "border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--fg-2)]",
-                    "transition-all duration-150 hover:border-[var(--border-strong)] hover:text-[var(--fg)]"
-                  )}
-                  href={data.about.cvUrl}
-                  rel="noreferrer"
-                  target="_blank"
-                >
+              {about.cvUrl && (
+                <a className={buttonClass("secondary")} href={about.cvUrl} rel="noreferrer" target="_blank">
                   Curriculum Vitae
-                  <ArrowUpRight className="size-4" />
+                  <ArrowUpRight className={arrowNudge} />
                 </a>
               )}
             </div>
           </FadeIn>
 
-          {/* Portrait */}
-          {data.about.portrait && (
-            <FadeIn delay={0.12}>
-              <div className="media-container mx-auto w-full max-w-[14rem] sm:max-w-none overflow-hidden rounded-2xl">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-xl">
-                  <Image
-                    alt={data.about.name}
-                    className="h-full w-full object-cover object-top"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 14rem, 22rem"
-                    src={data.about.portrait}
-                  />
-                </div>
-              </div>
+          {about.links.length > 0 && (
+            <FadeIn delay={0.26}>
+              <ul className="mt-8 flex flex-wrap items-center gap-2">
+                {about.links.map((link) => (
+                  <li key={link.url}>
+                    <a
+                      aria-label={link.label}
+                      className="group flex size-11 items-center justify-center rounded-full border border-[var(--border)] text-[var(--fg-2)] hover:-translate-y-0.5 hover:border-[var(--accent)]/50 hover:text-[var(--accent-light)]"
+                      href={link.url}
+                      rel="noreferrer"
+                      target="_blank"
+                      title={link.label}
+                    >
+                      <SocialIcon label={link.label} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </FadeIn>
           )}
-        </section>
+        </div>
+      </section>
 
-        {/* ── Academic Trajectory ──────────────────────────────────────── */}
-        <section className="border-t border-[var(--border)]">
-          <AcademicTimeline entries={data.timeline} />
-        </section>
+      {/* ── Academic Trajectory ──────────────────────────────────────────── */}
+      <section aria-labelledby="trajectory" className="py-16 sm:py-24">
+        <div className="hairline mb-16 sm:mb-24" />
+        <SectionHeading id="trajectory" title="Academic Trajectory" />
+        <AcademicTimeline entries={data.timeline} />
+      </section>
 
-        {/* ── Open to Collaborations ────────────────────────────────────── */}
+      {/* ── Open to Collaborations ───────────────────────────────────────── */}
+      <section className="py-10 sm:py-16">
         <FadeIn>
-          <section className="border-t border-[var(--border)] py-8 sm:py-10">
-            <Card variant="elevated" className="text-center">
-              <CardBody className="py-10 space-y-5 max-w-lg mx-auto">
-                <h2 className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--fg)]">
-                  Let&apos;s Build Something
-                </h2>
-                <p className="text-[var(--fg-2)] leading-7">
-                  I&apos;m always interested in discussing research ideas, potential collaborations, and opportunities at the intersection of AI and materials science.
-                </p>
-                <div className="flex flex-wrap justify-center gap-3 pt-2">
-                  <Link
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-xl",
-                      "bg-[var(--fg)] px-6 py-3 text-sm font-semibold text-[var(--bg-1)]",
-                      "transition-all hover:opacity-90"
-                    )}
-                    href="/contact"
-                  >
-                    Get in Touch
-                    <ArrowRight className="size-4" />
-                  </Link>
-                  <Link
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-xl",
-                      "border border-[var(--border)] px-6 py-3 text-sm font-medium text-[var(--fg-2)]",
-                      "transition-all hover:border-[var(--border-strong)] hover:text-[var(--fg)]"
-                    )}
-                    href="/publications"
-                  >
-                    Read My Work
-                  </Link>
-                </div>
-              </CardBody>
-            </Card>
-          </section>
-        </FadeIn>
+          <div className="spotlight relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--bg-3)] px-6 py-14 text-center shadow-[var(--shadow)] sm:px-12 sm:py-20">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[36rem] max-w-full -translate-x-1/2 rounded-full bg-[var(--accent)]/15 blur-3xl"
+            />
 
-      </div>
+            <div className="relative mx-auto max-w-xl space-y-6">
+              <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--fg)] sm:text-4xl">Let&apos;s Build Something</h2>
+              <p className="leading-7 text-[var(--fg-2)]">
+                I&apos;m always interested in discussing research ideas, potential collaborations, and opportunities at the intersection of AI and materials science.
+              </p>
+              <div className="flex flex-col justify-center gap-3 pt-2 min-[420px]:flex-row min-[420px]:flex-wrap">
+                <Link className={buttonClass("primary")} href="/contact">
+                  Get in Touch
+                  <ArrowRight className={arrowSlide} />
+                </Link>
+                <Link className={buttonClass("secondary")} href="/publications">
+                  Read My Work
+                </Link>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      </section>
     </main>
   );
 }

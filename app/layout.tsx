@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Sora } from "next/font/google";
 import "katex/dist/katex.min.css";
 
+import { PointerSpotlight } from "@/components/motion/pointer-spotlight";
+import { ScrollProgress } from "@/components/motion/scroll-progress";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -59,6 +61,16 @@ export const metadata: Metadata = {
   }
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#070707" },
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" }
+  ]
+};
+
 export default async function RootLayout({
   children
 }: Readonly<{
@@ -74,9 +86,19 @@ export default async function RootLayout({
     >
       <body className="bg-[var(--bg-1)] font-[family-name:var(--font-body)] text-[var(--fg)] antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <div className="relative isolate min-h-screen">
-            <SiteHeader links={data.about.links} />
-            <div className="relative z-[1] pb-4">{children}</div>
+          <a
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg)] focus:px-4 focus:py-2 focus:text-sm focus:text-[var(--bg-1)]"
+            href="#main"
+          >
+            Skip to content
+          </a>
+          <ScrollProgress />
+          <PointerSpotlight />
+          <div className="relative isolate flex min-h-dvh flex-col">
+            <SiteHeader links={data.about.links} name={data.about.name} />
+            <div className="relative z-[1] flex-1" id="main">
+              {children}
+            </div>
             <SiteFooter links={data.about.links} name={data.about.name} />
           </div>
         </ThemeProvider>

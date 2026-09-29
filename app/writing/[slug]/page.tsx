@@ -17,8 +17,8 @@ export default async function WritingPage({ params }: { params: Promise<{ slug: 
   }
 
   return (
-    <main className="px-4 pb-16 sm:px-6 lg:px-10">
-      <article className="mx-auto max-w-3xl py-20 sm:py-28">
+    <main className="shell pb-16">
+      <article className="mx-auto max-w-3xl py-14 sm:py-24">
         <RichText source={source} />
       </article>
     </main>

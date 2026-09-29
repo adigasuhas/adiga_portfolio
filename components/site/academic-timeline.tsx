@@ -1,136 +1,121 @@
-import Image from "next/image";
+"use client";
 
-import { FadeIn } from "@/components/motion/fade-in";
+import Image from "next/image";
+import { motion } from "framer-motion";
+
 import type { TimelineEntry } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { REDUCED_TRANSITION, useReducedMotionSafe } from "@/components/motion/use-reduced-motion";
 
 type AcademicTimelineProps = {
   entries: TimelineEntry[];
 };
 
-export function AcademicTimeline({ entries }: AcademicTimelineProps) {
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+function UpcomingBadge() {
   return (
-    <section className="py-20 sm:py-28">
-      <FadeIn>
-        <h2 className="text-display-l text-[var(--fg)] mb-12">Academic Trajectory</h2>
-      </FadeIn>
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent)] px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wide text-white">
+      <span className="relative flex size-1.5">
+        <span className="ping-soft absolute inset-0 rounded-full bg-white" />
+        <span className="relative size-1.5 rounded-full bg-white" />
+      </span>
+      upcoming
+    </span>
+  );
+}
 
-      {/* Desktop: horizontal */}
-      <div className="hidden md:block">
-        <FadeIn delay={0.1}>
-          <div className="relative">
-            {/* Connecting line */}
-            <div
-              aria-hidden="true"
-              className="absolute top-[3.25rem] h-[3px] -translate-y-1/2 rounded-full bg-gradient-to-r from-transparent via-[var(--fg-3)] to-transparent"
-              style={{ width: "96%", left: "2%" }}
-            />
+function Logo({ entry, className }: { entry: TimelineEntry; className?: string }) {
+  return (
+    <div
+      className={cn(
+        "relative z-10 flex shrink-0 items-center justify-center rounded-2xl border bg-white p-2.5 shadow-[var(--shadow)]",
+        "transition-transform duration-500 group-hover:-translate-y-1 group-hover:shadow-[var(--shadow-lg)]",
+        entry.upcoming ? "border-[var(--accent)] shadow-[0_0_0_2px_var(--accent-dim)]" : "border-[var(--border)]",
+        className
+      )}
+    >
+      <Image
+        alt={entry.institution}
+        className="h-full w-full object-contain"
+        height={96}
+        src={entry.logo}
+        width={96}
+      />
+    </div>
+  );
+}
 
-            <div className="flex items-start justify-between gap-6 lg:gap-10" style={{ width: "96%", margin: "0 auto" }}>
-              {entries.map((entry) => (
-                <div
-                  className="flex flex-1 flex-col items-center text-center"
-                  key={entry.id}
-                >
-                  {/* Logo dot */}
-                  <div
-                    className={cn(
-                      "relative z-10 mb-6 flex h-[6.5rem] w-[6.5rem] items-center justify-center",
-                      "rounded-2xl border bg-white p-3",
-                      entry.upcoming
-                        ? "border-[var(--accent)] shadow-[0_0_0_2px_var(--accent-dim)]"
-                        : "border-[var(--border)]"
-                    )}
-                  >
-                    <Image
-                      alt={entry.institution}
-                      className="h-full w-full object-contain"
-                      height={80}
-                      src={entry.logo}
-                      width={80}
-                    />
-                    {entry.upcoming && (
-                      <span className="absolute -top-2 -right-2 rounded-full bg-[var(--accent)] px-1.5 py-0.5 text-[0.6rem] font-semibold tracking-wide text-white uppercase">
-                        upcoming
-                      </span>
-                    )}
-                  </div>
+export function AcademicTimeline({ entries }: AcademicTimelineProps) {
+  const reduceMotion = useReducedMotionSafe();
 
-                  {/* Dot on line */}
-                  <div
-                    aria-hidden="true"
-                    className={cn(
-                      "mb-5 h-2 w-2 rounded-full",
-                      entry.upcoming
-                        ? "bg-[var(--accent)]"
-                        : "bg-[var(--fg-3)]"
-                    )}
-                  />
+  const lineInitial = reduceMotion ? false : { scaleX: 0 };
+  const lineInitialY = reduceMotion ? false : { scaleY: 0 };
 
-                  {/* Content */}
-                  <div className="px-2 space-y-1 max-w-[13rem]">
-                    <p className="font-[family-name:var(--font-display)] text-sm font-semibold text-[var(--fg)] leading-snug">
-                      {entry.institution}
-                    </p>
-                    <p className="text-[0.8125rem] text-[var(--fg-2)] leading-snug">{entry.degree}</p>
-                    <p className="eyebrow text-[0.625rem] mt-1">{entry.years}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </FadeIn>
-      </div>
-
-      {/* Mobile: vertical */}
-      <div className="md:hidden space-y-0">
-        {entries.map((entry, index) => (
-          <FadeIn delay={index * 0.08} key={entry.id}>
-            <div className="relative flex items-start gap-5 pb-12 last:pb-0">
-              {/* Vertical connector */}
-              {index < entries.length - 1 && (
-                <div
-                  aria-hidden="true"
-                  className="absolute left-[2.3125rem] top-[5rem] bottom-2 w-[2px] rounded-full bg-gradient-to-b from-[var(--fg-3)] to-[var(--border)]"
-                />
-              )}
-
-              {/* Logo */}
-              <div
-                className={cn(
-                  "relative z-10 shrink-0 flex h-[4.75rem] w-[4.75rem] items-center justify-center",
-                  "rounded-xl border bg-white p-2",
-                  entry.upcoming
-                    ? "border-[var(--accent)] shadow-[0_0_0_2px_var(--accent-dim)]"
-                    : "border-[var(--border)]"
-                )}
-              >
-                <Image
-                  alt={entry.institution}
-                  className="h-full w-full object-contain"
-                  height={56}
-                  src={entry.logo}
-                  width={56}
-                />
-              </div>
-
-              {/* Text */}
-              <div className="pt-1 space-y-1">
-                {entry.upcoming && (
-                  <span className="inline-block rounded-full bg-[var(--accent)] px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wide text-white">
-                    upcoming
-                  </span>
-                )}
-                <p className="font-[family-name:var(--font-display)] font-semibold text-[var(--fg)] leading-snug">
-                  {entry.institution}
-                </p>
-                <p className="text-sm text-[var(--fg-2)]">{entry.degree}</p>
-                <p className="eyebrow text-[0.6875rem]">{entry.years}</p>
-              </div>
-            </div>
-          </FadeIn>
+  return (
+    <>
+      {/* Desktop / tablet: horizontal rail */}
+      <ol className="relative hidden md:grid" style={{ gridTemplateColumns: `repeat(${entries.length}, minmax(0, 1fr))` }}>
+        <motion.span
+          aria-hidden="true"
+          className="absolute left-[calc(50%/var(--n))] right-[calc(50%/var(--n))] top-12 h-px origin-left bg-gradient-to-r from-[var(--border-strong)] via-[var(--fg-3)] to-[var(--accent)]"
+          initial={lineInitial}
+          style={{ ["--n" as string]: entries.length }}
+          transition={reduceMotion ? REDUCED_TRANSITION : { duration: 1.4, ease: EASE }}
+          viewport={{ once: true, amount: 0.6 }}
+          whileInView={{ scaleX: 1 }}
+        />
+        {entries.map((entry, i) => (
+          <motion.li
+            className="group flex flex-col items-center px-3 text-center"
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            key={entry.id}
+            transition={reduceMotion ? REDUCED_TRANSITION : { duration: 0.7, delay: 0.25 + i * 0.18, ease: EASE }}
+            viewport={{ once: true, amount: 0.4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <Logo className="size-24" entry={entry} />
+            <div className="mt-7 flex min-h-6 items-center">{entry.upcoming && <UpcomingBadge />}</div>
+            <p className="mt-3 font-[family-name:var(--font-display)] text-sm font-semibold leading-snug text-[var(--fg)]">
+              {entry.institution}
+            </p>
+            <p className="mt-1 text-[0.8125rem] leading-snug text-[var(--fg-2)]">{entry.degree}</p>
+            <p className="eyebrow mt-2 tabular-nums">{entry.years}</p>
+          </motion.li>
         ))}
-      </div>
-    </section>
+      </ol>
+
+      {/* Phones: vertical rail */}
+      <ol className="relative md:hidden">
+        <motion.span
+          aria-hidden="true"
+          className="absolute bottom-10 left-8 top-10 w-px origin-top bg-gradient-to-b from-[var(--border-strong)] via-[var(--fg-3)] to-[var(--accent)]"
+          initial={lineInitialY}
+          transition={reduceMotion ? REDUCED_TRANSITION : { duration: 1.2, ease: EASE }}
+          viewport={{ once: true, amount: 0.3 }}
+          whileInView={{ scaleY: 1 }}
+        />
+        {entries.map((entry, i) => (
+          <motion.li
+            className="group relative flex items-center gap-5 py-4"
+            initial={reduceMotion ? false : { opacity: 0, x: -12 }}
+            key={entry.id}
+            transition={reduceMotion ? REDUCED_TRANSITION : { duration: 0.6, delay: 0.1 + i * 0.12, ease: EASE }}
+            viewport={{ once: true, amount: 0.5 }}
+            whileInView={{ opacity: 1, x: 0 }}
+          >
+            <Logo className="size-16" entry={entry} />
+            <div className="min-w-0 space-y-1">
+              {entry.upcoming && <UpcomingBadge />}
+              <p className="font-[family-name:var(--font-display)] font-semibold leading-snug text-[var(--fg)]">
+                {entry.institution}
+              </p>
+              <p className="text-sm text-[var(--fg-2)]">{entry.degree}</p>
+              <p className="eyebrow tabular-nums">{entry.years}</p>
+            </div>
+          </motion.li>
+        ))}
+      </ol>
+    </>
   );
 }

@@ -1,173 +1,192 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ThemeToggle } from "@/components/site/theme-toggle";
-import { cn } from "@/lib/utils";
 import type { ContactLink } from "@/lib/content";
-
-const NAV_LINKS = [
-  { href: "/", label: "About" },
-  { href: "/research", label: "Research" },
-  { href: "/publications", label: "Publications & Awards" },
-  { href: "/resources", label: "Resources" },
-  { href: "/contact", label: "Contact" }
-] as const;
+import { NAV_LINKS, isActivePath } from "@/lib/nav";
+import { cn } from "@/lib/utils";
+import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion";
 
 type SiteHeaderProps = {
   links: ContactLink[];
+  name: string;
 };
 
-export function SiteHeader({ links: _links }: SiteHeaderProps) {
+export function SiteHeader({ name }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
   const pathname = usePathname();
+  const reduceMotion = useReducedMotionSafe();
 
   useEffect(() => {
     let ticking = false;
     const handler = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 8);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 12);
+        ticking = false;
+      });
     };
     handler();
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
+  // Close the menu on navigation, and whenever the viewport grows past `lg`.
+  useEffect(() => setMenuOpen(false), [pathname]);
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => mq.matches && setMenuOpen(false);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  // Escape closes the mobile menu.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => event.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
+  const activeHref = NAV_LINKS.find((link) => isActivePath(pathname, link.href))?.href ?? null;
+  const pillHref = hovered ?? activeHref;
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-4 pb-0 sm:px-6 lg:px-10">
-      <nav
-        aria-label="Main navigation"
-        className={cn(
-          "mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-5 py-3 sm:px-7",
-          "border transition-all duration-300",
-          scrolled
-            ? "border-[var(--border)] bg-[var(--bg-2)]/90 shadow-[var(--shadow)] backdrop-blur-xl"
-            : "border-transparent bg-transparent"
-        )}
-      >
-        {/* Brand name — prominent display font */}
-        <Link
-          aria-label="Home"
-          className="group flex items-center gap-2.5 shrink-0"
-          href="/"
-        >
-          <span
-            className={cn(
-              "font-[family-name:var(--font-display)] text-[1.0625rem] font-semibold tracking-tight",
-              "text-[var(--fg)] transition-opacity duration-200 group-hover:opacity-75"
-            )}
-          >
-            Suhas Adiga
-          </span>
-        </Link>
-
-        {/* Desktop nav links */}
-        <ul className="hidden items-center gap-1 md:flex">
-          {NAV_LINKS.map((link) => {
-            const active = isActive(link.href);
-            return (
-              <li key={link.href}>
-                <Link
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "relative inline-flex items-center rounded-lg px-3.5 py-2",
-                    "text-[0.875rem] font-medium tracking-tight transition-all duration-200",
-                    active
-                      ? "text-[var(--fg)] bg-[var(--bg-4)]"
-                      : "text-[var(--fg-2)] hover:text-[var(--fg)] hover:bg-[var(--bg-3)]"
-                  )}
-                  href={link.href}
-                >
-                  {link.label}
-                  {/* Bottom accent line for active page */}
-                  {active && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute bottom-0.5 left-3.5 right-3.5 h-[2px] rounded-full bg-[var(--accent-2-light)] opacity-70"
-                    />
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-
-          {/* Mobile hamburger */}
-          <button
-            aria-expanded={menuOpen}
-            aria-label="Toggle menu"
-            className="flex flex-col gap-[5px] p-2 md:hidden rounded-lg hover:bg-[var(--bg-3)] transition-colors"
-            onClick={() => setMenuOpen((v) => !v)}
-            type="button"
-          >
-            <span
-              className={cn(
-                "block h-px w-5 bg-[var(--fg-2)] transition-all duration-200",
-                menuOpen && "translate-y-[6px] rotate-45"
-              )}
-            />
-            <span
-              className={cn(
-                "block h-px w-5 bg-[var(--fg-2)] transition-all duration-200",
-                menuOpen && "opacity-0"
-              )}
-            />
-            <span
-              className={cn(
-                "block h-px w-5 bg-[var(--fg-2)] transition-all duration-200",
-                menuOpen && "-translate-y-[6px] -rotate-45"
-              )}
-            />
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div
+    <>
+      <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5 lg:px-8">
+        <nav
+          aria-label="Main navigation"
           className={cn(
-            "mx-auto mt-2 max-w-6xl overflow-hidden rounded-2xl",
-            "border border-[var(--border)] bg-[var(--bg-2)]/95 shadow-[var(--shadow-lg)] backdrop-blur-xl"
+            "mx-auto flex h-14 max-w-[74rem] items-center justify-between gap-3 rounded-full border pl-2 pr-2 sm:pl-2.5",
+            "transition-[background-color,border-color,box-shadow] duration-500",
+            scrolled || menuOpen
+              ? "border-[var(--border)] bg-[var(--bg-2)]/80 shadow-[var(--shadow-lg)] backdrop-blur-xl backdrop-saturate-150"
+              : "border-transparent bg-transparent"
           )}
         >
-          <ul className="flex flex-col p-2">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  aria-current={isActive(link.href) ? "page" : undefined}
-                  className={cn(
-                    "block rounded-xl px-4 py-3 text-sm font-medium transition-colors",
-                    isActive(link.href)
-                      ? "bg-[var(--bg-5)] text-[var(--fg)]"
-                      : "text-[var(--fg-2)] hover:bg-[var(--bg-4)] hover:text-[var(--fg)]"
-                  )}
-                  href={link.href}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+          {/* Brand */}
+          <Link
+            aria-label={`${name} — home`}
+            className="group flex min-h-11 shrink-0 items-center rounded-full px-3"
+            href="/"
+          >
+            <span className="font-[family-name:var(--font-display)] text-[1.0625rem] font-semibold tracking-tight text-[var(--fg)] transition-opacity duration-200 group-hover:opacity-75">
+              {name}
+            </span>
+          </Link>
+
+          {/* Desktop links with a sliding highlight */}
+          <ul className="hidden items-center lg:flex" onMouseLeave={() => setHovered(null)}>
+            {NAV_LINKS.map((link) => {
+              const active = activeHref === link.href;
+              return (
+                <li key={link.href}>
+                  <Link
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "relative isolate inline-flex min-h-10 items-center rounded-full px-4 text-[0.875rem] font-medium tracking-[-0.005em]",
+                      active ? "text-[var(--fg)]" : "text-[var(--fg-2)] hover:text-[var(--fg)]"
+                    )}
+                    href={link.href}
+                    onFocus={() => setHovered(link.href)}
+                    onMouseEnter={() => setHovered(link.href)}
+                  >
+                    {pillHref === link.href && (
+                      <motion.span
+                        aria-hidden="true"
+                        className="absolute inset-0 -z-10 rounded-full border border-[var(--border)] bg-[var(--bg-5)]"
+                        layoutId="nav-pill"
+                        transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 36 }}
+                      />
+                    )}
+                    <span className="relative">{link.label}</span>
+                    {active && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute bottom-1.5 left-1/2 h-[2px] w-4 -translate-x-1/2 rounded-full bg-[var(--accent-2-light)] opacity-80"
+                      />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
-        </div>
-      )}
-    </header>
+
+          <div className="flex items-center gap-1.5">
+            <ThemeToggle />
+
+            {/* Menu button (below lg) */}
+            <button
+              aria-controls="mobile-menu"
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              className="relative flex size-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--bg-3)]/60 hover:bg-[var(--bg-5)] lg:hidden"
+              onClick={() => setMenuOpen((v) => !v)}
+              type="button"
+            >
+              <span className="relative block h-3 w-[1.125rem]">
+                <span
+                  className={cn(
+                    "absolute left-0 top-0 block h-[1.5px] w-full rounded-full bg-[var(--fg)] transition-all duration-300",
+                    menuOpen && "top-[5px] rotate-45"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute bottom-0 left-0 block h-[1.5px] w-full rounded-full bg-[var(--fg)] transition-all duration-300",
+                    menuOpen && "bottom-[5px] -rotate-45"
+                  )}
+                />
+              </span>
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile / tablet menu — dropdown panel, as in the original design */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              className="mx-auto mt-2 max-w-[74rem] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-2)]/95 shadow-[var(--shadow-lg)] backdrop-blur-xl lg:hidden"
+              exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
+              id="mobile-menu"
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ul className="flex flex-col p-2">
+                {NAV_LINKS.map((link) => {
+                  const active = activeHref === link.href;
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        aria-current={active ? "page" : undefined}
+                        className={cn(
+                          "flex min-h-11 items-center rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+                          active
+                            ? "bg-[var(--bg-5)] text-[var(--fg)]"
+                            : "text-[var(--fg-2)] hover:bg-[var(--bg-4)] hover:text-[var(--fg)]"
+                        )}
+                        href={link.href}
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+    </>
   );
 }

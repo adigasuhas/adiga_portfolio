@@ -17,10 +17,12 @@ type MarkdownTextProps = {
   className?: string;
   /** Tailwind classes applied to each <p>. */
   paragraphClassName?: string;
+  /** Optional classes for the first paragraph only (e.g. a lead style). */
+  firstParagraphClassName?: string;
 };
 
 const LINK_CLASS =
-  "font-medium text-[var(--accent-light)] underline decoration-[var(--accent-light)]/35 underline-offset-[3px] transition-colors hover:text-[var(--fg)] hover:decoration-[var(--fg)]";
+  "font-medium text-[var(--accent-light)] underline decoration-[var(--accent-light)]/35 decoration-1 underline-offset-[4px] transition-colors hover:text-[var(--fg)] hover:decoration-[var(--fg)]";
 
 // Matches: markdown links, bold spans, or bare URLs — in priority order.
 const TOKEN_RE =
@@ -86,14 +88,15 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
 export function MarkdownText({
   text,
   className,
-  paragraphClassName
+  paragraphClassName,
+  firstParagraphClassName
 }: MarkdownTextProps) {
   const paragraphs = text.split("\n\n").filter((p) => p.trim().length > 0);
 
   return (
     <div className={className}>
       {paragraphs.map((para, i) => (
-        <p className={paragraphClassName} key={i}>
+        <p className={i === 0 && firstParagraphClassName ? firstParagraphClassName : paragraphClassName} key={i}>
           {renderInline(para, `p${i}`).map((node, j) => (
             <Fragment key={j}>{node}</Fragment>
           ))}

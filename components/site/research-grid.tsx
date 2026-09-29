@@ -1,243 +1,144 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { ArrowRight, Plus } from "lucide-react";
+import { useCallback, useState } from "react";
 
 import { FadeIn } from "@/components/motion/fade-in";
-import { Card, CardBody } from "@/components/ui/card";
+import { Citation, DegreeBadge, ProjectLinks, StatusBadge } from "@/components/site/project-parts";
+import { arrowSlide } from "@/components/ui/link-button";
 import { Modal } from "@/components/ui/modal";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/lib/content";
 
-/* ─── Degree badge ───────────────────────────────────────────────────────── */
+/* ─── Grid card ──────────────────────────────────────────────────────────── */
 
-const DEGREE_STYLES: Record<Project["degree"], string> = {
-  "B.Sc.":
-    "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/35",
-  "M.S.":
-    "bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/35",
-  "Ph.D.":
-    "bg-violet-500/15 text-violet-700 dark:text-violet-300 border-violet-500/35"
-};
-
-export function DegreeBadge({ degree }: { degree: Project["degree"] }) {
+function ProjectGridCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em]",
-        DEGREE_STYLES[degree]
-      )}
-    >
-      {degree}
-    </span>
-  );
-}
-
-/* ─── Status badge ───────────────────────────────────────────────────────── */
-
-export function StatusBadge({ status }: { status: Project["status"] }) {
-  if (status === "published") {
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/35 bg-emerald-500/15 px-2.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-emerald-700 dark:text-emerald-300">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-        Published
-      </span>
-    );
-  }
-  if (status === "manuscript-in-review") {
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/15 px-2.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-amber-700 dark:text-amber-300">
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-        Manuscript in Review
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center rounded-full border border-[var(--border-strong)] bg-[var(--bg-5)] px-2.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[var(--fg-2)]">
-      Manuscript in Preparation
-    </span>
-  );
-}
-
-/* ─── Grid card (compact, 3-col) ─────────────────────────────────────────── */
-
-type ProjectGridCardProps = {
-  project: Project;
-  onOpen: () => void;
-};
-
-function ProjectGridCard({ project, onOpen }: ProjectGridCardProps) {
-  return (
-    <Card
-      as="article"
-      className="flex h-full flex-col overflow-hidden"
-      hover
-    >
-      {/* Image */}
-      <div className="media-container m-3 mb-0 shrink-0 overflow-hidden rounded-xl">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
+    <article className="card card-hover spotlight group relative flex h-full flex-col overflow-hidden">
+      <div className="media-container m-2.5 mb-0 overflow-hidden rounded-[0.9rem] p-0">
+        <div className="relative aspect-[4/3] overflow-hidden">
           <Image
             alt={project.title}
-            className="h-full w-full object-contain transition-transform duration-500 hover:scale-[1.03]"
+            className="object-contain p-3 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
             src={project.image}
             unoptimized={project.image.endsWith(".gif")}
           />
         </div>
       </div>
 
-      {/* Body */}
-      <CardBody className="flex flex-1 flex-col gap-3">
-        <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+        <div className="flex flex-wrap items-center gap-2">
           <DegreeBadge degree={project.degree} />
           <StatusBadge status={project.status} />
         </div>
 
-        <h3 className="font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[var(--fg)] tracking-tight line-clamp-3">
+        <h3 className="font-[family-name:var(--font-display)] text-base font-semibold leading-snug tracking-tight text-[var(--fg)]">
           {project.title}
         </h3>
 
-        <p className="text-sm text-[var(--fg-2)] leading-relaxed line-clamp-2 flex-1">
-          {project.summary}
-        </p>
+        <p className="flex-1 text-sm leading-relaxed text-[var(--fg-2)]">{project.summary}</p>
 
+        {/* The whole card is the hit area (stretched pseudo-element). */}
         <button
+          aria-haspopup="dialog"
           className={cn(
-            "mt-auto self-start rounded-lg border border-[var(--border)] px-3 py-1.5",
-            "text-sm text-[var(--fg-2)] transition-all duration-150",
-            "hover:border-[var(--border-strong)] hover:text-[var(--fg)] hover:bg-[var(--bg-5)]",
-            "focus-visible:outline-2 focus-visible:outline-[var(--border-focus)]"
+            "mt-2 inline-flex min-h-11 items-center gap-3 self-start text-sm font-medium text-[var(--fg)]",
+            "after:absolute after:inset-0 after:rounded-[1.25rem] after:content-['']",
+            "focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-[var(--border-focus)]"
           )}
           onClick={onOpen}
           type="button"
         >
+          <span className="flex size-9 items-center justify-center rounded-full border border-[var(--border-strong)] transition-all duration-300 group-hover:rotate-90 group-hover:border-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--bg-1)]">
+            <Plus className="size-4" />
+          </span>
           Know More
         </button>
-      </CardBody>
-    </Card>
+      </div>
+    </article>
   );
 }
 
 /* ─── Modal content ──────────────────────────────────────────────────────── */
 
-function ProjectModalContent({ project, onClose }: { project: Project; onClose: () => void }) {
+function ProjectModalContent({ project }: { project: Project }) {
   return (
     <div>
-      {/* Image */}
-      <div className="media-container m-4 mb-0 overflow-hidden rounded-xl">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-lg">
+      <div className="media-container m-3 mb-0 overflow-hidden rounded-xl p-0 sm:m-4 sm:mb-0">
+        <div className="relative aspect-[16/10] overflow-hidden">
           <Image
             alt={project.title}
-            className="h-full w-full object-contain"
+            className="object-contain p-3"
             fill
-            sizes="(max-width: 640px) 100vw, 672px"
+            sizes="(max-width: 672px) 100vw, 672px"
             src={project.image}
             unoptimized={project.image.endsWith(".gif")}
           />
         </div>
       </div>
 
-      <CardBody className="space-y-5">
-        <div className="flex flex-wrap items-start gap-3">
-          <div className="flex-1 space-y-2 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <DegreeBadge degree={project.degree} />
-              <StatusBadge status={project.status} />
-            </div>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold tracking-tight text-[var(--fg)] leading-snug">
-              {project.title}
-            </h2>
+      <div className="space-y-6 p-5 sm:p-7">
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <DegreeBadge degree={project.degree} />
+            <StatusBadge status={project.status} />
           </div>
+          <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold leading-snug tracking-tight text-[var(--fg)]">
+            {project.title}
+          </h2>
         </div>
 
-        {/* Description */}
-        <div className="prose-shell text-sm">
-          {project.description.split("\n\n").map((para, i) => (
-            <p key={i} className="text-[var(--fg-2)] leading-7">
-              {para}
-            </p>
-          ))}
-        </div>
-
-        {/* Citation */}
-        {project.citation && (
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-2)] p-4">
-            <p className="eyebrow mb-2 text-[0.625rem]">Citation</p>
-            <p className="font-[family-name:var(--font-mono)] text-[0.8125rem] text-[var(--fg-2)] leading-6">
-              {project.citation}
-            </p>
-          </div>
-        )}
-
-        {/* Links */}
-        {(project.paperUrl || project.resources.length > 0) && (
-          <div className="flex flex-wrap gap-3 pt-1">
-            {project.paperUrl && (
-              <a
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-lg border border-[var(--border)]",
-                  "px-3 py-2 text-sm text-[var(--fg-2)]",
-                  "transition-colors hover:border-[var(--border-strong)] hover:text-[var(--fg)]"
-                )}
-                href={project.paperUrl}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Paper
-                <ExternalLink className="size-3.5" />
-              </a>
-            )}
-            {project.resources.map((r) => (
-              <a
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-lg border border-[var(--border)]",
-                  "px-3 py-2 text-sm text-[var(--fg-2)]",
-                  "transition-colors hover:border-[var(--border-strong)] hover:text-[var(--fg)]"
-                )}
-                href={r.url}
-                key={r.url}
-                rel="noreferrer"
-                target="_blank"
-              >
-                {r.label}
-                <ArrowUpRight className="size-3.5" />
-              </a>
+        <div className="space-y-4">
+          {project.description
+            .split("\n\n")
+            .filter((p) => p.trim())
+            .map((para, i) => (
+              <p className="text-sm leading-7 text-[var(--fg-2)]" key={i}>
+                {para}
+              </p>
             ))}
-          </div>
-        )}
-      </CardBody>
+        </div>
+
+        {project.citation && <Citation text={project.citation} />}
+
+        <ProjectLinks project={project} />
+
+        <div className="border-t border-[var(--border)] pt-5">
+          <Link
+            className="group/btn inline-flex min-h-10 items-center gap-2 text-sm font-medium text-[var(--accent-light)] hover:text-[var(--fg)]"
+            href={`/research/${project.slug}`}
+          >
+            Open project page
+            <ArrowRight className={arrowSlide} />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ─── Main grid component ────────────────────────────────────────────────── */
+/* ─── Main grid ──────────────────────────────────────────────────────────── */
 
-type ResearchGridProps = {
-  projects: Project[];
-};
-
-export function ResearchGrid({ projects }: ResearchGridProps) {
+export function ResearchGrid({ projects }: { projects: Project[] }) {
   const [selected, setSelected] = useState<Project | null>(null);
+  const close = useCallback(() => setSelected(null), []);
 
   return (
     <>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {projects.map((project, i) => (
-          <FadeIn delay={i * 0.05} key={project.id}>
-            <ProjectGridCard
-              onOpen={() => setSelected(project)}
-              project={project}
-            />
+          <FadeIn className="h-full" delay={(i % 3) * 0.08} key={project.id}>
+            <ProjectGridCard onOpen={() => setSelected(project)} project={project} />
           </FadeIn>
         ))}
       </div>
 
-      <Modal onClose={() => setSelected(null)} open={selected !== null}>
-        {selected && (
-          <ProjectModalContent onClose={() => setSelected(null)} project={selected} />
-        )}
+      <Modal label={selected?.title} onClose={close} open={selected !== null}>
+        {selected && <ProjectModalContent project={selected} />}
       </Modal>
     </>
   );

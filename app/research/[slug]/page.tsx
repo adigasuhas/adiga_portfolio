@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { FadeIn } from "@/components/motion/fade-in";
-import { Card, CardBody } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { Citation, DegreeBadge, ProjectLinks, StatusBadge } from "@/components/site/project-parts";
 import { getSiteData, getProjectBySlug } from "@/lib/content";
+import { cn } from "@/lib/utils";
 
 type ResearchDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -30,138 +30,101 @@ export default async function ResearchDetailPage({ params }: ResearchDetailPageP
 
   if (!project) notFound();
 
+  const { projects } = await getSiteData();
+  const position = projects.findIndex((p) => p.slug === project.slug);
+  const previous = position > 0 ? projects[position - 1] : null;
+  const next = position < projects.length - 1 ? projects[position + 1] : null;
+
   return (
-    <main className="px-4 pb-24 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-6xl">
-
-        {/* Back link */}
-        <div className="pt-10 sm:pt-14">
-          <Link
-            className={cn(
-              "inline-flex items-center gap-2 text-sm text-[var(--fg-2)]",
-              "transition-colors hover:text-[var(--fg)]"
-            )}
-            href="/research"
-          >
+    <main className="shell">
+      {/* Back link */}
+      <div className="pt-8 sm:pt-12">
+        <Link
+          className="group inline-flex min-h-11 items-center gap-2 rounded-full pr-3 text-sm text-[var(--fg-2)] hover:text-[var(--fg)]"
+          href="/research"
+        >
+          <span className="flex size-9 items-center justify-center rounded-full border border-[var(--border)] transition-transform duration-300 group-hover:-translate-x-0.5">
             <ArrowLeft className="size-4" />
-            Research
-          </Link>
-        </div>
+          </span>
+          Research
+        </Link>
+      </div>
 
-        {/* Header */}
-        <FadeIn>
-          <div className="py-10 sm:py-12">
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span
-                className={cn(
-                  "inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.6875rem] font-semibold border",
-                  project.degree === "B.Sc."
-                    ? "bg-[rgba(234,179,8,0.12)] text-[#ca8a04] border-[rgba(234,179,8,0.2)]"
-                    : "bg-[var(--accent-dim)] text-[var(--accent-light)] border-[rgba(37,99,235,0.2)]"
-                )}
-                style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.18em", textTransform: "uppercase" }}
-              >
-                {project.degree}
-              </span>
-              {project.status !== "published" && (
-                <span className="inline-flex items-center rounded-full bg-[var(--bg-5)] px-2.5 py-0.5 text-[0.6rem] text-[var(--fg-3)] border border-[var(--border)]">
-                  In preparation
-                </span>
-              )}
-            </div>
-            <h1 className="text-display-l text-[var(--fg)] max-w-3xl">
-              {project.title}
-            </h1>
+      {/* Header */}
+      <FadeIn>
+        <header className="pb-12 pt-8 sm:pb-16 sm:pt-12">
+          <div className="mb-6 flex flex-wrap items-center gap-2">
+            <DegreeBadge className="px-2.5 py-0.5 font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-[0.18em]" degree={project.degree} />
+            <StatusBadge status={project.status} />
           </div>
+          <h1 className="text-display-l max-w-4xl text-[var(--fg)]">{project.title}</h1>
+        </header>
+      </FadeIn>
+
+      <div className="hairline" />
+
+      {/* Content */}
+      <section className="grid gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.9fr)] lg:gap-16">
+        <FadeIn className="order-last space-y-8 lg:order-first">
+          <div className="space-y-6">
+            {project.description
+              .split("\n\n")
+              .filter((p) => p.trim())
+              .map((para, i) => (
+                <p className="leading-7 text-[var(--fg-2)]" key={i}>
+                  {para}
+                </p>
+              ))}
+          </div>
+
+          {project.citation && <Citation text={project.citation} />}
+
+          <ProjectLinks project={project} size="md" />
         </FadeIn>
 
-        {/* Content grid */}
-        <section className="border-t border-[var(--border)] py-10 sm:py-14">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.7fr)]">
-
-            {/* Left: description */}
-            <FadeIn>
-              <div className="space-y-8">
-                <div className="space-y-5">
-                  {project.description.split("\n\n").map((para, i) => (
-                    <p className="text-[var(--fg-2)] leading-7" key={i}>
-                      {para}
-                    </p>
-                  ))}
-                </div>
-
-                {/* Citation */}
-                {project.citation && (
-                  <Card variant="elevated">
-                    <CardBody>
-                      <p className="eyebrow mb-2 text-[0.6rem]">Citation</p>
-                      <p className="font-[family-name:var(--font-mono)] text-[0.8125rem] text-[var(--fg-2)] leading-6">
-                        {project.citation}
-                      </p>
-                    </CardBody>
-                  </Card>
-                )}
-
-                {/* Links */}
-                {(project.paperUrl || project.resources.length > 0) && (
-                  <div className="flex flex-wrap gap-3">
-                    {project.paperUrl && (
-                      <a
-                        className={cn(
-                          "inline-flex items-center gap-2 rounded-xl border border-[var(--border)]",
-                          "px-4 py-2.5 text-sm font-medium text-[var(--fg-2)]",
-                          "transition-all hover:border-[var(--border-strong)] hover:text-[var(--fg)]"
-                        )}
-                        href={project.paperUrl}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        Paper
-                        <ExternalLink className="size-3.5" />
-                      </a>
-                    )}
-                    {project.resources.map((r) => (
-                      <a
-                        className={cn(
-                          "inline-flex items-center gap-2 rounded-xl border border-[var(--border)]",
-                          "px-4 py-2.5 text-sm font-medium text-[var(--fg-2)]",
-                          "transition-all hover:border-[var(--border-strong)] hover:text-[var(--fg)]"
-                        )}
-                        href={r.url}
-                        key={r.url}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        {r.label}
-                        <ArrowUpRight className="size-3.5" />
-                      </a>
-                    ))}
-                  </div>
-                )}
+        <FadeIn delay={0.1}>
+          <div className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]">
+            <div className="media-container overflow-hidden rounded-2xl p-0 shadow-[var(--shadow-lg)]">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  alt={project.title}
+                  className="object-contain p-3"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  src={project.image}
+                  unoptimized={project.image.endsWith(".gif")}
+                />
               </div>
-            </FadeIn>
-
-            {/* Right: image */}
-            <FadeIn delay={0.1}>
-              <div className="media-container overflow-hidden rounded-2xl">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                  <Image
-                    alt={project.title}
-                    className="h-full w-full object-contain"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 40vw"
-                    src={project.image}
-                    unoptimized={project.image.endsWith(".gif")}
-                  />
-                </div>
-              </div>
-            </FadeIn>
-
+            </div>
           </div>
-        </section>
+        </FadeIn>
+      </section>
 
-      </div>
+      {/* Previous / next project */}
+      {(previous || next) && (
+        <nav aria-label="More projects" className="grid gap-4 border-t border-[var(--border)] pt-10 sm:grid-cols-2">
+          {[previous, next].map((item, i) =>
+            item ? (
+              <Link
+                className={cn(
+                  "card card-hover spotlight group flex min-h-24 flex-col justify-center gap-2 p-5 sm:p-6",
+                  i === 1 && "sm:col-start-2 sm:text-right"
+                )}
+                href={`/research/${item.slug}`}
+                key={item.slug}
+              >
+                <span className={cn("inline-flex text-[var(--fg-3)]", i === 1 && "sm:justify-end")}>
+                  {i === 0 ? <ArrowLeft className="size-3.5 transition-transform duration-300 group-hover:-translate-x-1" /> : <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />}
+                </span>
+                <span className="font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[var(--fg)]">
+                  {item.title}
+                </span>
+              </Link>
+            ) : null
+          )}
+        </nav>
+      )}
     </main>
   );
 }
