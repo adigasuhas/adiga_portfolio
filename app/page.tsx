@@ -26,16 +26,13 @@ export default async function HomePage() {
 
         <div className="min-w-0">
           <FadeIn>
-            <p className="eyebrow eyebrow-rule">About</p>
-          </FadeIn>
-          <FadeIn delay={0.05}>
-            <h1 className="text-display-xl mt-6 text-[var(--fg)]">{about.name}</h1>
+            <h1 className="text-display-xl text-[var(--fg)]">About</h1>
           </FadeIn>
 
-          <FadeIn delay={0.12}>
+          <FadeIn delay={0.08}>
             <MarkdownText
-              className="mt-8 max-w-[40rem] space-y-6 sm:mt-10"
-                            paragraphClassName="text-body"
+              className="mt-7 max-w-2xl space-y-5"
+              paragraphClassName="text-body"
               text={about.biography}
             />
           </FadeIn>
