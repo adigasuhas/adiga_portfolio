@@ -19,7 +19,7 @@ export default async function HomePage() {
       {/* ── About (hero) ─────────────────────────────────────────────────── */}
       <section className="grid gap-10 pb-12 pt-8 sm:gap-14 sm:pb-16 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start lg:gap-20 lg:pt-20">
         {about.portrait && (
-          <FadeIn className="order-first w-[13.5rem] sm:w-[17rem] lg:order-last lg:mt-4 lg:w-full" delay={0.15} y={24}>
+          <FadeIn className="order-first mx-auto w-[13.5rem] sm:w-[17rem] lg:order-last lg:mx-0 lg:mt-4 lg:w-full" delay={0.15} y={24}>
             <ParallaxPortrait alt={about.name} src={about.portrait} />
           </FadeIn>
         )}

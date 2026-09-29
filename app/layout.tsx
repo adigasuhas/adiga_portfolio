@@ -85,7 +85,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-[var(--bg-1)] font-[family-name:var(--font-body)] text-[var(--fg)] antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="theme-preference">
           <a
             className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg)] focus:px-4 focus:py-2 focus:text-sm focus:text-[var(--bg-1)]"
             href="#main"
